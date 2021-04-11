@@ -23,9 +23,27 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
     console.log('connection error: ',err)
   const productsCollection = client.db("FoodDesire").collection("products");
+  
+  app.get('/products',(req,res) => {
+    productsCollection.find()
+    .toArray((err,items) => {
+        res.send(items)
+        console.log('From DataBase', items)
+    })
+  })
+
+  app.post('/addProduct',(req,res) => {
+      const newEvent = req.body;
+      console.log('Adding New Event', newEvent)
+      productsCollection.insertOne(newEvent)
+      .then(result => {
+          console.log('inserted count: ',result.insertedCount)
+          res.send(result.insertedCount > 0)
+      })
+  })
   // perform actions on the collection object
-  console.log('Database connection successfully');
-//   client.close();
+  // console.log('Database connection successfully');
+  // client.close();
 });
 
 

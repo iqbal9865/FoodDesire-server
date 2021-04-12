@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors')
 const bodyParser = require('body-parser')
 require('dotenv').config()
+const ObjectID = require('mongodb').ObjectID;
 const port = process.env.PORT || 5055
 console.log(process.env.DB_USER)
 
@@ -41,6 +42,13 @@ client.connect(err => {
           res.send(result.insertedCount > 0)
       })
   })
+  app.delete('/delete/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    console.log('delete this',id)
+    productsCollection.findOneAndDelete({_id: id})
+    .then(documents => res.send(!!documents.value))
+  })
+  
   // perform actions on the collection object
   // console.log('Database connection successfully');
   // client.close();

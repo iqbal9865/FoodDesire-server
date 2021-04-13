@@ -60,6 +60,7 @@ client.connect(err => {
         res.send(result.insertedCount > 0)
     })
 })
+
 app.get('/orders',(req,res) => {
   console.log(req.query.email)
   ordersCollection.find({email: req.query.email})
